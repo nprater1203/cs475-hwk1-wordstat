@@ -4,6 +4,13 @@
  *  Created on: Jun 15, 2015
  *      Author: dchiu
  */
+
+/*
+	Name: Nicholas Prater
+	Course: CS 481
+	Professor: Dr. Chiu
+	Date: 1/23/23
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -38,12 +45,6 @@ int main(int argc, char *argv[])
 
 	gettingUserInput(input, token, histogram, &vowelCount, &totalChars);
 
-	// printf("Total Chars: %d\nTotal Vowels: %d:\nTotal Const: %d\n", totalChars,vowelCount,totalChars-vowelCount);
-
-	// for(int i = 0; i < ALPHABET_SIZE; i++){
-	// 	printf("Histogram index %c: %d\n",(char)i+97,histogram[i]);
-	// }
-
 	bool notQuit = true;
 	int numOption;
 	while (notQuit)
@@ -60,39 +61,46 @@ int main(int argc, char *argv[])
 		else if (numOption == 2)
 		{
 			int maxNumber = 0;
-			for(int i = 0; i < ALPHABET_SIZE; i++){
-				if(histogram[i] > maxNumber){
+			for (int i = 0; i < ALPHABET_SIZE; i++)
+			{
+				if (histogram[i] > maxNumber)
+				{
 					maxNumber = histogram[i];
 				}
 			}
 			char printHisto[ALPHABET_SIZE][maxNumber];
-			for(int i = 0; i < maxNumber; i++){ 
-				for(int j = 0; j < ALPHABET_SIZE; j++){
-					if(histogram[j] == maxNumber){
-						printHisto[i][j] = '*';
-					}
-					else{
-						printHisto[i][j] = '0';
-					}
+			for(int i = 0; i < ALPHABET_SIZE; i++){
+				for(int j = 0; j < maxNumber; j++){
+						printHisto[i][j] = ' ';
 				}
 			}
 
-			for(int i = ALPHABET_SIZE-1; i >= 0; i--){
-				for(int j = maxNumber-1; j >= 0; j--){
-					if(printHisto[i][j] == '*'){
-						printf("*");
-					}
+			for (int i = 0; i < ALPHABET_SIZE; i++)
+			{
+				for (int j = 0; j < histogram[i]; j++)
+				{
+					printHisto[i][j] = '*';
+				}
+			}
+
+			for (int i = maxNumber-1; i >= 0; i--)
+			{
+				for (int j = 0; j < ALPHABET_SIZE; j++)
+				{
+					printf("%c ", printHisto[j][i]);
 				}
 				printf("\n");
 			}
-			for(int i = 0 ; i < ALPHABET_SIZE; i++){
+			for (int i = 0; i < ALPHABET_SIZE; i++)
+			{
 				printf("%c ", 'a' + i);
 			}
 			printf("\n");
-			for(int i = 0 ; i < ALPHABET_SIZE; i++){
+			for (int i = 0; i < ALPHABET_SIZE; i++)
+			{
 				printf("%d ", histogram[i]);
 			}
-			printf("\n\n");
+			printf("\n");
 		}
 		else if (numOption == 3)
 		{
@@ -138,7 +146,8 @@ void gettingUserInput(char *input, char *token, int histogram[], int *vowelCount
 			{
 				// printf("%c\n", *temp);
 				// printf("Letter: %c Index: %d\n", *temp, (int)*temp - (int)'a');
-				if (*temp >= 'A' && *temp <= 'Z'){
+				if (*temp >= 'A' && *temp <= 'Z')
+				{
 					histogram[(int)*temp - upperANum]++;
 					countChars++;
 				}
@@ -152,8 +161,8 @@ void gettingUserInput(char *input, char *token, int histogram[], int *vowelCount
 			token = strtok(NULL, " ");
 		}
 		vCount = histogram[(int)'a' - aNum] + histogram[(int)'e' - aNum] +
-					  histogram[(int)'i' - aNum] + histogram[(int)'o' - aNum] +
-					  histogram[(int)'u' - aNum];
+				 histogram[(int)'i' - aNum] + histogram[(int)'o' - aNum] +
+				 histogram[(int)'u' - aNum];
 		if (*input == '#')
 		{
 			acceptsInput = false;

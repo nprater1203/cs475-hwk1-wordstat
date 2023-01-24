@@ -7,7 +7,7 @@
 
 /*
 	Name: Nicholas Prater
-	Course: CS 481
+	Course: CS 481 OS
 	Professor: Dr. Chiu
 	Date: 1/23/23
 */
@@ -19,7 +19,6 @@
 #include "stats.h"
 #include "menu.h"
 
-void gettingUserInput(char *input, char *token, int histogram[], int *vowelCount, int *totalChars);
 
 /**
  * @brief Main function
@@ -43,65 +42,34 @@ int main(int argc, char *argv[])
 	char *input = malloc(MAX_INPUT_LEN * sizeof(char));
 	char *token = malloc(MAX_INPUT_LEN * sizeof(char));
 
+	// Prompt the user to input strings
 	gettingUserInput(input, token, histogram, &vowelCount, &totalChars);
 
 	bool notQuit = true;
 	int numOption;
+
+	// Prompt the user for menu options and complete them according to what the 
+	// user inputs
 	while (notQuit)
 	{
 		numOption = getMenuOption();
+
+		// Vowel and consonants frequencies
 		if (numOption == 1)
 		{
-			// printf("This is one\n");
 			int consonantCount = totalChars - vowelCount;
 			printf("\nVowels = %d (%.2f%%), Consonants = %d (%.2f%%), Total= %d\n",
 				   vowelCount, 100.00 * ((float)(vowelCount) / (totalChars)), consonantCount,
 				   100.00 * ((float)(consonantCount) / (totalChars)), totalChars);
 		}
+
+		// Printing the histogram
 		else if (numOption == 2)
 		{
-			int maxNumber = 0;
-			for (int i = 0; i < ALPHABET_SIZE; i++)
-			{
-				if (histogram[i] > maxNumber)
-				{
-					maxNumber = histogram[i];
-				}
-			}
-			char printHisto[ALPHABET_SIZE][maxNumber];
-			for(int i = 0; i < ALPHABET_SIZE; i++){
-				for(int j = 0; j < maxNumber; j++){
-						printHisto[i][j] = ' ';
-				}
-			}
-
-			for (int i = 0; i < ALPHABET_SIZE; i++)
-			{
-				for (int j = 0; j < histogram[i]; j++)
-				{
-					printHisto[i][j] = '*';
-				}
-			}
-
-			for (int i = maxNumber-1; i >= 0; i--)
-			{
-				for (int j = 0; j < ALPHABET_SIZE; j++)
-				{
-					printf("%c ", printHisto[j][i]);
-				}
-				printf("\n");
-			}
-			for (int i = 0; i < ALPHABET_SIZE; i++)
-			{
-				printf("%c ", 'a' + i);
-			}
-			printf("\n");
-			for (int i = 0; i < ALPHABET_SIZE; i++)
-			{
-				printf("%d ", histogram[i]);
-			}
-			printf("\n");
+			printHistogram(histogram);
 		}
+
+		// Prompting the user for more string inputs
 		else if (numOption == 3)
 		{
 			gettingUserInput(input, token, histogram, &vowelCount, &totalChars);
@@ -110,64 +78,16 @@ int main(int argc, char *argv[])
 		{
 			notQuit = false;
 		}
+
+		// Error handling for improper user menu input
 		else
 		{
 			printf("Error: Unknown option %d\n", numOption);
 		}
 	}
 
-	// TODO: start by getting strings from users until # is input
-	// TODO: after # is input, print menu options
-
 	printf("Exiting...\n");
-
 	free(input);
 	free(token);
 	return 0;
-}
-
-void gettingUserInput(char *input, char *token, int histogram[], int *vowelCount, int *totalChars)
-{
-	bool acceptsInput = true;
-	int aNum = (int)'a';
-	int upperANum = (int)'A';
-	int countChars = 0;
-	int vCount;
-
-	printf("Enter string (# to stop):\n");
-	while (acceptsInput)
-	{
-		fgets(input, MAX_INPUT_LEN, stdin);
-		token = strtok(input, " ");
-		while (token != NULL)
-		{
-			char *temp = token;
-			while (*temp != '\0')
-			{
-				// printf("%c\n", *temp);
-				// printf("Letter: %c Index: %d\n", *temp, (int)*temp - (int)'a');
-				if (*temp >= 'A' && *temp <= 'Z')
-				{
-					histogram[(int)*temp - upperANum]++;
-					countChars++;
-				}
-				if (*temp >= 'a' && *temp <= 'z')
-				{
-					histogram[(int)*temp - aNum]++;
-					countChars++;
-				}
-				temp++;
-			}
-			token = strtok(NULL, " ");
-		}
-		vCount = histogram[(int)'a' - aNum] + histogram[(int)'e' - aNum] +
-				 histogram[(int)'i' - aNum] + histogram[(int)'o' - aNum] +
-				 histogram[(int)'u' - aNum];
-		if (*input == '#')
-		{
-			acceptsInput = false;
-		}
-	}
-	*totalChars += countChars;
-	*vowelCount = vCount;
 }
